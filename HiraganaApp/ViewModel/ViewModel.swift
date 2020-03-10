@@ -16,8 +16,10 @@ final class ViewModel {
     private let hiraganaApi = HiraganaApi()
 
     func convertKanji() {
+        // API実行リクエスト
         hiraganaApi.requestApi(kanji: kanji.value) { converted in
             if let converted = converted {
+                // ViewControllerへaccept
                 self.hiragana.accept(converted)
             } else {
                 print("Returned nil")
