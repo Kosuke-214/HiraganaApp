@@ -1,0 +1,6 @@
+framework module Pods_HiraganaApp {
+  umbrella header "Pods-HiraganaApp-umbrella.h"
+
+  export *
+  module * { export * }
+}
