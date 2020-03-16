@@ -10,14 +10,14 @@ import RxSwift
 import RxCocoa
 
 final class ViewModel {
-    var kanji = BehaviorRelay<String>(value: "")
+    var kanji: String!
     var hiragana = BehaviorRelay<String>(value: "")
 
     private let hiraganaApi = HiraganaApi()
 
     func convertKanji() {
         // API実行リクエスト
-        hiraganaApi.requestApi(kanji: kanji.value) { converted in
+        hiraganaApi.requestApi(kanji: kanji) { converted in
             if let converted = converted {
                 // ViewControllerへaccept
                 self.hiragana.accept(converted)

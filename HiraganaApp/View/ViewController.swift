@@ -25,7 +25,6 @@ final class ViewController: UIViewController {
         kanjiTextView.delegate = self
 
         setupView()
-        setupButton()
         dataBind()
 
     }
@@ -43,43 +42,19 @@ final class ViewController: UIViewController {
         hiraganaTextView.layer.cornerRadius = 10.0
         hiraganaTextView.layer.masksToBounds = true
 
-
-        // 変換ボタンの設定
-        convertButton.backgroundColor = .gray
-        convertButton.isEnabled = false
-
         //　ナビゲーションバーの設定
         self.navigationController?.navigationBar.barTintColor = UIColor(named: "AppTheme")
         self.navigationController?.navigationBar.tintColor = .white
         self.navigationController?.navigationBar.titleTextAttributes = [.foregroundColor: UIColor.white]
     }
 
-    private func setupButton() {
-
-        // ボタン活性/非活性の設定
-        kanjiTextView.rx.text
-            .subscribe(onNext: { text in
-                if text!.count > 0 {
-                    self.convertButton.isEnabled = true
-                    self.convertButton.backgroundColor = UIColor(named: "AppTheme")
-                } else {
-                    self.convertButton.isEnabled = false
-                    self.convertButton.backgroundColor = .gray
-                }
-            })
-            .disposed(by: disposeBag)
-
-        // ボタンタップ時の動作
-        convertButton.rx.tap
-            .subscribe { [weak self] _ in
-                self?.viewModel.convertKanji()
-        }.disposed(by: disposeBag)
-    }
-
     private func dataBind() {
         // 漢字入力をbind
         kanjiTextView.rx.text.orEmpty
-            .bind(to: viewModel.kanji)
+            .subscribe { [weak self] _ in
+                self?.viewModel.kanji = (self?.kanjiTextView.text)!
+                self?.viewModel.convertKanji()
+            }
             .disposed(by: disposeBag)
 
         // ひらがな出力をbind
